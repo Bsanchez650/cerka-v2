@@ -18,6 +18,12 @@ app.get('/api/health', (req, res) => {
     res.json({status: 'ok', timestamp: new Date().toISOString()});
 });
 
+const db = require('./config/db');
+
+db.query('SELECT NOW()')
+  .then(() => console.log('Connected to PostgreSQL'))
+  .catch((err) => console.error('Database connection failed:', err.message));
+
 app.listen(PORT, () => {
     console.log(`Cerka API running on http://localhost:${PORT}`);
 });
