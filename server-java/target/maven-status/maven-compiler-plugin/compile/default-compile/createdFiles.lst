@@ -1,0 +1,5 @@
+com\cerka\controller\ProviderController.class
+com\cerka\CerkaApplication.class
+com\cerka\repository\ProviderRepository.class
+com\cerka\controller\HealthController.class
+com\cerka\model\Provider.class

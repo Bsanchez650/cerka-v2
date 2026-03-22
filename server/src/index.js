@@ -37,6 +37,7 @@ db.query('SELECT NOW()')
   .catch((err) => console.error('Database connection failed:', err.message));
 
 // Routes
+app.use('/api/search', require('./routes/search'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/providers', require('./routes/providers'));
 app.use('/api/categories', require('./routes/categories'));
