@@ -25,6 +25,8 @@ db.query('SELECT NOW()')
   .catch((err) => console.error('Database connection failed:', err.message));
 
 app.use('/api/providers', require('./routes/providers'));
+app.use('/api/categories', require('./routes/categories'));
+app.use('/api/services', require('./routes/services'));
 
 app.listen(PORT, () => {
     console.log(`Cerka API running on http://localhost:${PORT}`);
