@@ -24,6 +24,8 @@ db.query('SELECT NOW()')
   .then(() => console.log('Connected to PostgreSQL'))
   .catch((err) => console.error('Database connection failed:', err.message));
 
+app.use('/api/providers', require('./routes/providers'));
+
 app.listen(PORT, () => {
     console.log(`Cerka API running on http://localhost:${PORT}`);
 });
