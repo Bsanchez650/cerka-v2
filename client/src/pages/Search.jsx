@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Search as SearchIcon, MapPin, Star, Filter, X } from "lucide-react";
+import { Search as SearchIcon, Star, X } from "lucide-react";
 import { Navigation } from "../components/Navigation";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -8,7 +8,7 @@ import { Trie } from "../lib/trie";
 import { api } from "../services/api";
 
 export function SearchPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") || "");
   const [categories, setCategories] = useState([]);
   const [providers, setProviders] = useState([]);
@@ -17,10 +17,9 @@ export function SearchPage() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Build trie from categories and services
+  // Build trie from keywords and categories
   const trie = useMemo(() => {
     const t = new Trie();
-    // Insert service keywords
     const keywords = [
       "haircut", "hair", "styling", "barber", "fade",
       "lashes", "lash", "eyelash", "extensions", "classic", "volume",
@@ -29,21 +28,18 @@ export function SearchPage() {
       "beard", "trim", "brows", "eyebrow", "waxing",
     ];
     keywords.forEach((word) => t.insert(word, { type: "keyword", value: word }));
-
-    // Insert category names
     categories.forEach((cat) => {
       t.insert(cat.name, { type: "category", value: cat.name, id: cat.id });
     });
-
     return t;
   }, [categories]);
 
-  // Load categories on mount
+  // Load categories
   useEffect(() => {
     api.get("/categories").then(setCategories).catch(console.error);
   }, []);
 
-  // Search when params change
+  // Search when query or category changes
   useEffect(() => {
     const fetchResults = async () => {
       setLoading(true);
@@ -100,12 +96,10 @@ export function SearchPage() {
       <div className="pt-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
 
-          {/* Search Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold mb-6">Find Service Providers</h1>
 
             <div className="flex flex-col md:flex-row gap-4">
-              {/* Search Input with Autocomplete */}
               <div className="relative flex-1">
                 <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
                 <Input
@@ -118,7 +112,6 @@ export function SearchPage() {
                   className="pl-10 h-12 bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-500 focus:border-red-500"
                 />
 
-                {/* Autocomplete Dropdown */}
                 {showSuggestions && suggestions.length > 0 && (
                   <div className="absolute top-full left-0 right-0 mt-1 bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden z-50 shadow-xl">
                     {suggestions.map((s, i) => (
@@ -138,7 +131,6 @@ export function SearchPage() {
                 )}
               </div>
 
-              {/* Category Filter */}
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
@@ -150,7 +142,6 @@ export function SearchPage() {
                 ))}
               </select>
 
-              {/* Clear Filters */}
               {(query || selectedCategory) && (
                 <Button
                   onClick={clearFilters}
@@ -164,12 +155,10 @@ export function SearchPage() {
             </div>
           </div>
 
-          {/* Results Count */}
           <p className="text-zinc-400 mb-6">
             {loading ? "Searching..." : `${providers.length} provider${providers.length !== 1 ? "s" : ""} found`}
           </p>
 
-          {/* Results Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {providers.map((provider) => (
               <Link to={`/provider/${provider.id}`} key={provider.id} className="group">
@@ -213,7 +202,6 @@ export function SearchPage() {
             ))}
           </div>
 
-          {/* No Results */}
           {!loading && providers.length === 0 && (
             <div className="text-center py-20">
               <SearchIcon className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
