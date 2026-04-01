@@ -18,22 +18,22 @@ const serviceImages = [
   {
     name: "Haircut & Styling",
     image: "https://images.unsplash.com/photo-1547648946-2b1fd7eab923?w=800&h=600&fit=crop",
-    link: "/search?service=haircut",
+    link: "/search?category=1",
   },
   {
     name: "Eyelash Extensions",
     image: "https://images.unsplash.com/photo-1519415387722-a1c3bbef716c?w=800&h=600&fit=crop",
-    link: "/search?service=lashes",
+    link: "/search?category=2",
   },
   {
     name: "Nail Art",
     image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=800&h=600&fit=crop",
-    link: "/search?service=nails",
+    link: "/search?category=3",
   },
   {
     name: "Skin Treatments",
     image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&h=600&fit=crop",
-    link: "/search?service=skincare",
+    link: "/search?category=4",
   },
 ];
 
@@ -291,7 +291,7 @@ export function Landing() {
               Join Cerka and grow your business. Connect with new clients, manage your schedule, and build your reputation.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/api/auth/google">
+              <a href="/oauth2/authorization/google">
                 <Button size="lg" className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-8">
                   Get Started Free
                   <ArrowRight className="ml-2 w-4 h-4" />
@@ -379,13 +379,13 @@ export function Landing() {
               <h4 className="font-semibold mb-4">For Customers</h4>
               <ul className="space-y-2 text-sm text-zinc-400">
                 <li><Link to="/search" className="hover:text-white transition-colors">Find Providers</Link></li>
-                <li><a href="/api/auth/google" className="hover:text-white transition-colors">Sign Up</a></li>
+                <li><a href="/oauth2/authorization/google" className="hover:text-white transition-colors">Sign Up</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">For Providers</h4>
               <ul className="space-y-2 text-sm text-zinc-400">
-                <li><a href="/api/auth/google" className="hover:text-white transition-colors">Get Started</a></li>
+                <li><a href="/oauth2/authorization/google" className="hover:text-white transition-colors">Get Started</a></li>
                 <li><Link to="/provider/dashboard" className="hover:text-white transition-colors">Provider Dashboard</Link></li>
               </ul>
             </div>

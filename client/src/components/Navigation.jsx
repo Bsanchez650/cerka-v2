@@ -76,12 +76,12 @@ export function Navigation() {
               </div>
             ) : (
               <>
-                <a href="/api/auth/google">
+                <a href="/oauth2/authorization/google">
                   <Button variant="ghost" size="sm" className="text-zinc-300 hover:text-white">
                     Login
                   </Button>
                 </a>
-                <a href="/api/auth/google">
+                <a href="/oauth2/authorization/google">
                   <Button size="sm" className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white">
                     Sign Up
                   </Button>
