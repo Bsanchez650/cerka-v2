@@ -1,5 +1,11 @@
-com\cerka\controller\ProviderController.class
+com\cerka\config\JacksonConfig.class
 com\cerka\CerkaApplication.class
-com\cerka\repository\ProviderRepository.class
-com\cerka\controller\HealthController.class
+com\cerka\config\CorsConfig$1.class
+com\cerka\controller\SearchController.class
 com\cerka\model\Provider.class
+com\cerka\controller\ProviderController.class
+com\cerka\repository\ProviderRepository.class
+com\cerka\config\CorsConfig.class
+com\cerka\controller\HealthController.class
+com\cerka\controller\CategoryController.class
+com\cerka\controller\ServiceController.class
