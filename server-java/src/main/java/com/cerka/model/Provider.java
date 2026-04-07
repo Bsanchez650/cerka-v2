@@ -37,7 +37,7 @@ public class Provider {
         this.avgRating = avgRating;
     }
 
-    public int totalReviews(){
+    public int getTotalReviews(){
         return totalReviews;
     }
 
@@ -74,7 +74,7 @@ public class Provider {
         this.instagramHandle = instagramHandle;
     }
 
-    public boolean isAcceptsWalkins(){
+    public boolean getAcceptsWalkins(){
         return acceptsWalkins;
     }
     

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,20 +36,26 @@ public class SearchController {
             WHERE sp.is_active = true
             """);
 
+        List<Object> param = new ArrayList<>();
         if (category != null) {
-            sql.append(" AND s.category_id = ").append(category);
+            sql.append(" AND s.category_id = ? ");
+            param.add(category);
         }
 
         if (q != null && !q.isEmpty()) {
-            String like = "'%" + q.toLowerCase() + "%'";
-            sql.append(" AND (LOWER(sp.business_name) LIKE ").append(like);
-            sql.append(" OR LOWER(u.name) LIKE ").append(like);
-            sql.append(" OR LOWER(s.name) LIKE ").append(like);
-            sql.append(" OR LOWER(c.name) LIKE ").append(like).append(")");
+            String like = "%" + q.toLowerCase() + "%";
+            sql.append(" AND (LOWER(sp.business_name) LIKE ?");
+            sql.append(" OR LOWER(u.name) LIKE ?");
+            sql.append(" OR LOWER(s.name) LIKE ?");
+            sql.append(" OR LOWER(c.name) LIKE ?)");
+            param.add(like);
+            param.add(like);
+            param.add(like);
+            param.add(like);
         }
 
         sql.append(" ORDER BY sp.avg_rating DESC");
 
-        return jdbc.queryForList(sql.toString());
+        return jdbc.queryForList(sql.toString(), param.toArray());
     }
 }
