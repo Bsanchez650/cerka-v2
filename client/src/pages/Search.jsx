@@ -1,10 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Search as SearchIcon, Star, X } from "lucide-react";
 import { Navigation } from "../components/Navigation";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Trie } from "../lib/trie";
+import { MaxHeap } from "../lib/heap";
 import { api } from "../services/api";
 
 export function SearchPage() {
@@ -39,6 +39,13 @@ export function SearchPage() {
     api.get("/categories").then(setCategories).catch(console.error);
   }, []);
 
+  function scoreProvider(provider){
+    const rating = provider.avg_rating || 0;
+    const reviews = provider.total_reviews || 0;
+    const walkins = provider.accepts_walkins ? 1 : 0;
+    return (rating * 10) + (Math.log(reviews + 1) * 2) + walkins;
+  }
+
   // Search when query or category changes
   useEffect(() => {
     const fetchResults = async () => {
@@ -48,7 +55,13 @@ export function SearchPage() {
         if (query) params.set("q", query);
         if (selectedCategory) params.set("category", selectedCategory);
         const results = await api.get(`/search?${params.toString()}`);
-        setProviders(results);
+        const heap = new MaxHeap((a,b) => scoreProvider(a) - scoreProvider(b));
+        results.forEach(provider => heap.insert(provider));
+        const sorted = [];
+        while(heap.size() > 0){
+          sorted.push(heap.extractMax());
+        }
+        setProviders(sorted);
       } catch (err) {
         console.error("Search failed:", err);
       }
