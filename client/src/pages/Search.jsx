@@ -6,6 +6,7 @@ import { Input } from "../components/ui/input";
 import { Trie } from "../lib/trie";
 import { MaxHeap } from "../lib/heap";
 import { api } from "../services/api";
+import { Search as SearchIcon, Star, X } from "lucide-react";
 
 export function SearchPage() {
   const [searchParams] = useSearchParams();
@@ -16,6 +17,7 @@ export function SearchPage() {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [sortMode, setSortMode] = useState("best");
 
   // Build trie from keywords and categories
   const trie = useMemo(() => {
@@ -46,6 +48,21 @@ export function SearchPage() {
     return (rating * 10) + (Math.log(reviews + 1) * 2) + walkins;
   }
 
+  function getCompareFn(mode) {
+    // if mode is "best", use scoreProvider
+    if(mode === "best"){
+      return (a,b) => scoreProvider(a)-scoreProvider(b);
+    }
+    if(mode === "rating"){
+      return (a,b) => (a.avg_rating || 0)- (b.avg_rating || 0);
+    }
+    if(mode === "reviews"){
+      return (a ,b) => (a.total_reviews || 0) - (b.total_reviews || 0);
+    }
+    // if mode is "rating", compare by avg_rating
+    // if mode is "reviews", compare by total_reviews
+  }
+
   // Search when query or category changes
   useEffect(() => {
     const fetchResults = async () => {
@@ -55,20 +72,21 @@ export function SearchPage() {
         if (query) params.set("q", query);
         if (selectedCategory) params.set("category", selectedCategory);
         const results = await api.get(`/search?${params.toString()}`);
-        const heap = new MaxHeap((a,b) => scoreProvider(a) - scoreProvider(b));
+        const heap = new MaxHeap(getCompareFn(sortMode));
         results.forEach(provider => heap.insert(provider));
         const sorted = [];
         while(heap.size() > 0){
           sorted.push(heap.extractMax());
         }
         setProviders(sorted);
+        
       } catch (err) {
         console.error("Search failed:", err);
       }
       setLoading(false);
     };
     fetchResults();
-  }, [query, selectedCategory]);
+  }, [query, selectedCategory, sortMode]);
 
   // Trie autocomplete
   const handleInputChange = (value) => {
@@ -154,6 +172,16 @@ export function SearchPage() {
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
               </select>
+              <select
+                value = {sortMode}
+                onChange={(e) => setSortMode(e.target.value)}
+                className="h-12 px-4 bg-zinc-900 border border-zinc-800 rounded-md text-white focus:border-red-500 outline-none"
+                >
+                  <option value="best">Best Overall</option>
+                  <option value="rating">Top Rated</option>
+                  <option value="reviews">Most Reviewed</option>
+                </select>
+              
 
               {(query || selectedCategory) && (
                 <Button
