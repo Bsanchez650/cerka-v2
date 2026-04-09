@@ -20,6 +20,20 @@ While the current focus is beauty and personal care (barbers, lash techs, esthet
 - **Auth:** Google OAuth 2.0 via Spring Security
 - **Architecture:** RESTful API with Controller → Repository → Model pattern
 
+## Screenshots
+
+### Landing Page
+![Landing Page](docs/screenshots/landing.png)
+
+### Search with Trie Autocomplete
+![Autocomplete](docs/screenshots/autocomplete.png)
+
+### Heap-Powered Sort Modes
+![Sort Dropdown](docs/screenshots/sort-dropdown.png)
+
+### Provider Profile
+![Provider Profile](docs/screenshots/provider-profile.png)
+
 ## Data Structures & Algorithms
 
 This project intentionally applies DSA concepts in a production context:
